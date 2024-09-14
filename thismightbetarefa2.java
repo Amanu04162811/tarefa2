@@ -8,6 +8,7 @@ class Tarefa {
     private String prazo;
     private int prioridade;
 
+    // Método para validar prazo
     private boolean isPrazoValido(String prazo) {
         try {
             LocalDate.parse(prazo);
@@ -17,43 +18,22 @@ class Tarefa {
         }
     }
 
-    private boolean isPrioridadeValida(int prioridade) {
-        return prioridade >= 1 && prioridade <= 5;
-    }
-
+    // Construtor completo
     public Tarefa(String titulo, String descricao, String prazo, int prioridade) {
         this.titulo = titulo;
         this.descricao = descricao;
-        this.prazo = prazo;
-        if (isPrioridadeValida(prioridade)) {
-            this.prioridade = prioridade;
-        } else {
-            this.prioridade = 1;
-            System.out.println("Prioridade inválida. Definida como 1 por padrão.");
-        }
+        this.setPrazo(prazo); // Usando o setter para validar o prazo
+        this.prioridade = prioridade;
     }
 
+    // Construtor com menos parâmetros
     public Tarefa(String titulo, String prazo) {
-        this.titulo = titulo;
-        this.prazo = prazo;
-        this.descricao = "";
-        this.prioridade = 1;
+        this(titulo, "", prazo, 0); // Chamando o construtor completo com valores padrão
     }
 
-    public Tarefa(String titulo, int prioridade) {
-        this.titulo = titulo;
-        this.descricao = "";
-        this.prazo = LocalDate.now().toString();
-        if (isPrioridadeValida(prioridade)) {
-            this.prioridade = prioridade;
-        } else {
-            this.prioridade = 1;
-            System.out.println("Prioridade inválida. Definida como 1 por padrão.");
-        }
-    }
-
+    // Métodos getters e setters
     public String getTitulo() {
-        return this.titulo;
+        return titulo;
     }
 
     public void setTitulo(String titulo) {
@@ -61,7 +41,7 @@ class Tarefa {
     }
 
     public String getDescricao() {
-        return this.descricao;
+        return descricao;
     }
 
     public void setDescricao(String descricao) {
@@ -69,7 +49,7 @@ class Tarefa {
     }
 
     public String getPrazo() {
-        return this.prazo;
+        return prazo;
     }
 
     public void setPrazo(String prazo) {
@@ -80,44 +60,38 @@ class Tarefa {
         }
     }
 
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        // Adicione aqui a lógica para validar a prioridade se necessário
+        this.prioridade = prioridade;
+    }
+
     public void exibirDetalhes() {
-        System.out.println("Título: " + this.titulo);
-        System.out.println("Descrição: " + this.descricao);
-        System.out.println("Prazo: " + this.prazo);
-        System.out.println("Prioridade: " + this.prioridade);
+        System.out.println("Título: " + titulo);
+        System.out.println("Descrição: " + descricao);
+        System.out.println("Prazo: " + prazo);
+        System.out.println("Prioridade: " + prioridade);
     }
 
     public long calcularDiasRestantes() {
-        LocalDate dataPrazo = LocalDate.parse(this.prazo);
+        LocalDate dataPrazo = LocalDate.parse(prazo);
         LocalDate hoje = LocalDate.now();
-
         return ChronoUnit.DAYS.between(hoje, dataPrazo);
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Tarefa tarefa1 = new Tarefa("Estudar POO", "Revisar os conceitos de classes e objetos", "2024-05-15", 1);
-
-        System.out.println("=============== Testando métodos gets ===============");
-        System.out.println("Título: " + tarefa1.getTitulo());
-        System.out.println("Descrição: " + tarefa1.getDescricao());
-        System.out.println();
-
-        System.out.println("=============== Imprimindo com método exibitDetalhes() ===============");
+        Tarefa tarefa1 = new Tarefa("Estudar POO", "Revisar os conceitos de classes e objetos", "2024-09-15", 1);
         tarefa1.exibirDetalhes();
 
-        System.out.println("=============== Imprimindo tarefa com o construtor 2 ===============");
-        Tarefa tarefa2 = new Tarefa("Estudar para provas", "2050-10-25");
-        tarefa2.exibirDetalhes();
+        System.out.println("Dias restantes: " + tarefa1.calcularDiasRestantes());
 
-        System.out.println("Dias restantes para a tarefa 2: " + tarefa2.calcularDiasRestantes());
-
-        System.out.println("=============== Imprimindo tarefa com o construtor 3 ===============");
-        Tarefa tarefa3 = new Tarefa("Ler um livro", 3);
-        tarefa3.exibirDetalhes();
-
-        System.out.print("Novo prazo da tarefa 1: ");
-        tarefa1.setPrazo("2024-05-15");
+        // Tentando setar um prazo inválido
+        tarefa1.setPrazo("2024-15-48");
+        tarefa1.exibirDetalhes();
     }
 }
